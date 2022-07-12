@@ -7,7 +7,8 @@ async function app() {
   net = await mobilenet.load();
   console.log("Modelo cargado correctamente");
 
-  // Crea un objeto de tensorFlow desde la cámara
+  //La función "tf.data.webcam" genera tensores a
+  //partir de la informacion obtenida a traves de la camara...
   const webcam = await tf.data.webcam(webcamElement);
 
   // Lee la imagen y lo asocia a una clase
@@ -25,8 +26,7 @@ async function app() {
     img.dispose();
   };
 
-  //Guardar el entrenamiento en el formato de Tensores
-
+  //Se guarda el entrenamiento con formato de tensores en un archivo ".txt"
   const saveModel = (async) => {
     let dataset = classifier.getClassifierDataset();
     var datasetObj = {};
@@ -35,6 +35,8 @@ async function app() {
       datasetObj[key] = Array.from(data);
     });
 
+    //Se crea el archivo ".txt" en el que se
+    //guardara la informacion obtenida como tensores...
     var a = document.createElement("a");
     var file = new Blob([JSON.stringify(datasetObj)], { type: "text/plain" });
     a.href = URL.createObjectURL(file);
@@ -42,6 +44,7 @@ async function app() {
     a.click();
   };
 
+  //Se carga el archivo ".txt"...
   document
     .getElementById("file-selector")
     .addEventListener("change", function () {
@@ -62,7 +65,7 @@ async function app() {
 
   //----------------------------------------------------------------------------------
 
-  // Se guarda un ejemplo a la clase
+  // Se guarda un ejemplo a la clase...
   document
     .getElementById("class-a")
     .addEventListener("click", () => addExample(0));
@@ -75,9 +78,7 @@ async function app() {
   document
     .getElementById("class-d")
     .addEventListener("click", () => addExample(3));
-  document
-    .getElementById("save")
-    .addEventListener("click", () => saveModel());
+  document.getElementById("save").addEventListener("click", () => saveModel());
 
   while (true) {
     if (classifier.getNumClasses() > 0) {
